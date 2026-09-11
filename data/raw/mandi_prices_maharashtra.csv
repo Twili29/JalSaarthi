@@ -1,0 +1,11 @@
+crop,district,mandi_name,min_price_rs_q,max_price_rs_q,modal_price_rs_q,msp_rs_q,arrival_tonnes,as_of_date,source
+Cotton,solapur,Solapur APMC,6650,7350,7120,7020,42.5,2026-09-08,Agmarknet / MSAMB
+Cotton,pune,Baramati APMC,6700,7400,7180,7020,38.0,2026-09-08,Agmarknet / MSAMB
+Soybean,solapur,Solapur APMC,4300,4850,4680,4600,85.2,2026-09-09,Agmarknet / MSAMB
+Soybean,pune,Pune APMC,4400,4950,4740,4600,110.0,2026-09-09,Agmarknet / MSAMB
+Maize,solapur,Karmala APMC,1950,2280,2150,2090,64.0,2026-09-08,Agmarknet / MSAMB
+Maize,pune,Shirur APMC,2000,2320,2190,2090,72.5,2026-09-08,Agmarknet / MSAMB
+Gram,solapur,Solapur APMC,5200,5850,5620,5440,55.0,2026-09-09,Agmarknet / MSAMB
+Gram,pune,Pune APMC,5300,5900,5680,5440,78.4,2026-09-09,Agmarknet / MSAMB
+Jowar,solapur,Solapur APMC,2900,3500,3280,3180,48.0,2026-09-09,Agmarknet / MSAMB
+Jowar,pune,Manchar APMC,2950,3550,3320,3180,35.0,2026-09-09,Agmarknet / MSAMB
