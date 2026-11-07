@@ -241,6 +241,15 @@ SOIL_PROFILES = {
         "available_water_capacity_mm_per_m": 140.0,
         "drainage_rate": "High",
         "description": "Requires frequent light irrigations due to lower water retention."
+    },
+    "Clay Loam": {
+        "name_mr": "गाळाची चिकणमाती जमीन (Clay Loam)",
+        "name_hi": "चिकनी दोमट मिट्टी (Clay Loam)",
+        "field_capacity": 0.34,
+        "wilting_point": 0.16,
+        "available_water_capacity_mm_per_m": 165.0,
+        "drainage_rate": "Moderate",
+        "description": "Fertile alluvial clay loam common in Western Maharashtra & Pune transition belt; balanced moisture retention and aeration."
     }
 }
 

@@ -28,6 +28,7 @@ from engine.water_engine import (
 )
 from engine.climate_risk import analyze_climate_risk
 from engine.yield_model import predict_yield, get_model
+from engine.translations import TRANSLATIONS, get_text
 from engine.optimizer import optimize_farming_strategy, evaluate_annual_rotation, get_historical_weather
 import pandas as pd
 import numpy as np
@@ -199,6 +200,33 @@ class TestJalSaarthiPipeline(unittest.TestCase):
         self.assertEqual(s_preset["budget_rs"], 50000)
         self.assertEqual(s_preset["default_water_m3"], 4000)
 
+    def test_10_translations_and_localization(self):
+        """Verify trilingual support for English, Marathi, and Hindi."""
+        for lang in ["en", "mr", "hi"]:
+            self.assertIn(lang, TRANSLATIONS, f"Missing language: {lang}")
+            lang_dict = TRANSLATIONS[lang]
+            # Key navigation checks
+            self.assertIn("nav_home", lang_dict)
+            self.assertIn("nav_reports", lang_dict)
+            self.assertIn("nav_scenario", lang_dict)
+            self.assertIn("nav_info", lang_dict)
+            # Home checks
+            self.assertIn("welcome_title", lang_dict)
+            self.assertIn("plan_title", lang_dict)
+            self.assertIn("best_crop_label", lang_dict)
+            # Scenario checks
+            self.assertIn("scen_rain_title", lang_dict)
+            self.assertIn("scen_water_title", lang_dict)
+            self.assertIn("scen_budget_title", lang_dict)
+            # Pop-up guide checks
+            self.assertIn("popup_title", lang_dict)
+            self.assertIn("popup_welcome", lang_dict)
+        
+        # Test string formatting
+        formatted = get_text("why_title", "en", crop="Soybean")
+        self.assertEqual(formatted, "Why Soybean?")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
 
