@@ -62,6 +62,29 @@ if "nav_view" not in st.session_state:
 def navigate_to(target_view):
     st.session_state["nav_view"] = target_view
 
+# Safe on_click callbacks to update scenario shock states before widget redraws
+def reset_scenario_shocks():
+    st.session_state["whatif_rain"] = 0
+    st.session_state["whatif_water"] = 0
+    st.session_state["whatif_temp"] = 0.0
+    st.session_state["whatif_budget"] = 0
+    st.session_state["slider_rain"] = 0
+    st.session_state["slider_water"] = 0
+    st.session_state["slider_temp"] = 0.0
+    st.session_state["slider_budget"] = 0
+
+def apply_preset_shock(rain=0, water=0, temp=0.0, budget=0, target_view=None):
+    st.session_state["whatif_rain"] = rain
+    st.session_state["whatif_water"] = water
+    st.session_state["whatif_temp"] = temp
+    st.session_state["whatif_budget"] = budget
+    st.session_state["slider_rain"] = rain
+    st.session_state["slider_water"] = water
+    st.session_state["slider_temp"] = temp
+    st.session_state["slider_budget"] = budget
+    if target_view:
+        st.session_state["nav_view"] = target_view
+
 # Automatically trigger pop-up guide as soon as user opens app
 if "has_seen_guide" not in st.session_state:
     st.session_state["has_seen_guide"] = False
@@ -895,16 +918,7 @@ Mandi Benchmark: Rs. {top_fin.get('market_price_per_q', 0)}/q ({top_fin.get('man
         with col_sb1:
             st.warning(f"⚡ **Active Climate Shock Applied**: {', '.join(badges)}. All metrics, yields, and RRI rankings reflect this scenario.")
         with col_sb2:
-            if st.button("🔄 Reset to Baseline", key="rep_clear_shock_btn", use_container_width=True):
-                st.session_state["whatif_rain"] = 0
-                st.session_state["whatif_water"] = 0
-                st.session_state["whatif_temp"] = 0.0
-                st.session_state["whatif_budget"] = 0
-                if "slider_rain" in st.session_state: st.session_state["slider_rain"] = 0
-                if "slider_water" in st.session_state: st.session_state["slider_water"] = 0
-                if "slider_temp" in st.session_state: st.session_state["slider_temp"] = 0.0
-                if "slider_budget" in st.session_state: st.session_state["slider_budget"] = 0
-                st.rerun()
+            st.button("🔄 Reset to Baseline", key="rep_clear_shock_btn", on_click=reset_scenario_shocks, use_container_width=True)
 
     # Top Row: 3 Highlight Cards
     r1, r2, r3 = st.columns(3)
@@ -1102,17 +1116,13 @@ elif st.session_state["nav_view"] == "scenario":
             <div class="scenario-card-crop">{get_crop_name(s1_crop)} <span style="font-size: 0.82rem; font-weight: normal; color: #555;">(RRI: {s1_rri})</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button(t("btn_view_details"), key="btn_apply_shock_rain", use_container_width=True):
-            st.session_state["whatif_rain"] = -20
-            st.session_state["whatif_water"] = 0
-            st.session_state["whatif_temp"] = 0.0
-            st.session_state["whatif_budget"] = 0
-            st.session_state["slider_rain"] = -20
-            st.session_state["slider_water"] = 0
-            st.session_state["slider_temp"] = 0.0
-            st.session_state["slider_budget"] = 0
-            navigate_to("reports")
-            st.rerun()
+        st.button(
+            t("btn_view_details"),
+            key="btn_apply_shock_rain",
+            on_click=apply_preset_shock,
+            kwargs={"rain": -20, "target_view": "reports"},
+            use_container_width=True
+        )
 
     with sc2:
         st.markdown(f"""
@@ -1123,17 +1133,13 @@ elif st.session_state["nav_view"] == "scenario":
             <div class="scenario-card-crop">{get_crop_name(s2_crop)} <span style="font-size: 0.82rem; font-weight: normal; color: #555;">(RRI: {s2_rri})</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button(t("btn_view_details"), key="btn_apply_shock_water", use_container_width=True):
-            st.session_state["whatif_rain"] = 0
-            st.session_state["whatif_water"] = -30
-            st.session_state["whatif_temp"] = 0.0
-            st.session_state["whatif_budget"] = 0
-            st.session_state["slider_rain"] = 0
-            st.session_state["slider_water"] = -30
-            st.session_state["slider_temp"] = 0.0
-            st.session_state["slider_budget"] = 0
-            navigate_to("reports")
-            st.rerun()
+        st.button(
+            t("btn_view_details"),
+            key="btn_apply_shock_water",
+            on_click=apply_preset_shock,
+            kwargs={"water": -30, "target_view": "reports"},
+            use_container_width=True
+        )
 
     with sc3:
         st.markdown(f"""
@@ -1144,17 +1150,13 @@ elif st.session_state["nav_view"] == "scenario":
             <div class="scenario-card-crop">{get_crop_name(s3_crop)} <span style="font-size: 0.82rem; font-weight: normal; color: #555;">(RRI: {s3_rri})</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button(t("btn_view_details"), key="btn_apply_shock_budget", use_container_width=True):
-            st.session_state["whatif_rain"] = 0
-            st.session_state["whatif_water"] = 0
-            st.session_state["whatif_temp"] = 0.0
-            st.session_state["whatif_budget"] = -int(s3_budget_cut)
-            st.session_state["slider_rain"] = 0
-            st.session_state["slider_water"] = 0
-            st.session_state["slider_temp"] = 0.0
-            st.session_state["slider_budget"] = -int(s3_budget_cut)
-            navigate_to("reports")
-            st.rerun()
+        st.button(
+            t("btn_view_details"),
+            key="btn_apply_shock_budget",
+            on_click=apply_preset_shock,
+            kwargs={"budget": -int(s3_budget_cut), "target_view": "reports"},
+            use_container_width=True
+        )
 
     st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
 
@@ -1210,16 +1212,7 @@ elif st.session_state["nav_view"] == "scenario":
     # Action Buttons: Reset and View in Reports
     col_act1, col_act2 = st.columns([1, 1.6])
     with col_act1:
-        if st.button("🔄 Reset All Scenarios", key="reset_scenarios_btn", use_container_width=True):
-            st.session_state["whatif_rain"] = 0
-            st.session_state["whatif_water"] = 0
-            st.session_state["whatif_temp"] = 0.0
-            st.session_state["whatif_budget"] = 0
-            st.session_state["slider_rain"] = 0
-            st.session_state["slider_water"] = 0
-            st.session_state["slider_temp"] = 0.0
-            st.session_state["slider_budget"] = 0
-            st.rerun()
+        st.button("🔄 Reset All Scenarios", key="reset_scenarios_btn", on_click=reset_scenario_shocks, use_container_width=True)
     with col_act2:
         if st.button("📊 " + t("btn_explore_scenarios"), key="view_rep_from_scen_btn", use_container_width=True):
             navigate_to("reports")
